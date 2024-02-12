@@ -2416,7 +2416,23 @@ function clearReplyBoxAutosave(replyBox) {
         localStorage.removeItem(autosaveKeyFor(replyBox));
     }
 }
-
+function validateReplyButton() {
+    const threads = document.querySelectorAll('.thread-post-form');
+    threads.forEach((form) => {
+        //For all  HTML forms found in threads we are going to get their textarea input and check if its empty and if it is we are setting the submit button to disabled
+        const forumTextBox = form.querySelector('textarea');
+        const submitButton = form.querySelector('input[type="submit"]');
+        forumTextBox.addEventListener('input', () => {
+            // Checks to see if text area input is empty then disables the submit button accordingly.
+            if (forumTextBox.value.trim() === '') {
+                submitButton.disabled = true;
+            }
+            else {
+                submitButton.disabled = false;
+            }
+        });
+    });
+}
 function setupForumAutosave() {
     // Include both regular reply boxes on the forum as well as the "reply" box
     // on the create thread page.
@@ -2428,6 +2444,7 @@ function setupForumAutosave() {
         );
         $(replyBox).find('input.thread-anon-checkbox').change(() => saveReplyBoxToLocal(replyBox));
     });
+    validateReplyButton();
 }
 
 // eslint-disable-next-line no-unused-vars
